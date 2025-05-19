@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Item Form</title>
+    <title>Expense Form</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #e6f0fa;
+            background-color: #F8BBD0; /* Light Pink as background */
             margin: 0;
             padding: 20px;
             display: flex;
@@ -17,16 +17,17 @@
             max-width: 500px;
             width: 100%;
             background-color: white;
-            border: 1px solid #ddd;
+            border: 1px solid #ECE2D0; /* Beige for border */
             border-radius: 4px;
             padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
         .header {
-            background-color: #000000;
+            background-color: #26A69A; /* Dark Teal for header */
             color: white;
             padding: 10px;
             text-align: center;
-            border-bottom: 1px solid #ddd;
+            border-bottom: 1px solid #ECE2D0; /* Beige for border */
             margin: -20px -20px 20px -20px;
         }
         .header h1 {
@@ -41,19 +42,16 @@
             margin-top: 10px;
             color: #333;
         }
-        .form-container input, .form-container textarea, .form-container select {
+        .form-container input, .form-container textarea {
             width: 100%;
             padding: 8px;
             margin-top: 5px;
-            border: 1px solid #ddd;
+            border: 1px solid #ECE2D0; /* Beige for input borders */
             border-radius: 4px;
             background-color: #ffffff;
         }
-        .form-container input[type="checkbox"] {
-            width: auto;
-        }
         .btn-save {
-            background-color: #28a745;
+            background-color: #FF80AB; /* Bright Pink for Save button */
             color: white;
             padding: 8px 16px;
             border: none;
@@ -61,22 +59,30 @@
             margin-right: 10px;
             margin-top: 20px;
             cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .btn-save:hover {
+            background-color: #80DEEA; /* Light Teal on hover */
         }
         .btn-cancel {
-            background-color: #6c757d;
+            background-color: #8D6E63; /* Maroon for Cancel button */
             color: white;
             padding: 8px 16px;
             border: none;
             border-radius: 4px;
             margin-top: 20px;
             text-decoration: none;
+            transition: background-color 0.3s;
+        }
+        .btn-cancel:hover {
+            background-color: #F8BBD0; /* Light Pink on hover */
         }
     </style>
 </head>
 <body>
     <div class="form-container">
         <div class="header">
-            <h1>{% if form.instance.pk %}Edit{% else %}Create{% endif %} Item</h1>
+            <h1>{% if form.instance.pk %}Edit{% else %}Add{% endif %} Expense</h1>
         </div>
         <form method="post">
             {% csrf_token %}
@@ -90,9 +96,10 @@
             const form = document.querySelector('form');
             form.addEventListener('submit', function(e) {
                 const name = document.querySelector('input[name="name"]').value.trim();
-                if (!name) {
+                const amount = document.querySelector('input[name="amount"]').value;
+                if (!name || isNaN(amount) || amount < 0) {
                     e.preventDefault();
-                    alert('Please fill in the name field.');
+                    alert('Please fill in the name and a valid non-negative amount.');
                 }
             });
         });

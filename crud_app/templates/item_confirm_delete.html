@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Confirm Deletion</title>
+    <title>Register</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #e6f0fa;
+            background-color: #F8BBD0; /* Light Pink as background */
             margin: 0;
             padding: 20px;
             display: flex;
@@ -13,61 +13,89 @@
             align-items: center;
             height: 100vh;
         }
-        .confirm-container {
-            max-width: 600px;
+        .form-container {
+            max-width: 400px;
             width: 100%;
-            margin: 0 auto;
             background-color: white;
-            border: 1px solid #ddd;
+            border: 1px solid #ECE2D0; /* Beige for border */
             border-radius: 4px;
             padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
         .header {
-            background-color: #000000;
+            background-color: #26A69A; /* Dark Teal for header */
             color: white;
             padding: 10px;
             text-align: center;
-            border-bottom: 1px solid #ddd;
+            border-bottom: 1px solid #ECE2D0; /* Beige for border */
             margin: -20px -20px 20px -20px;
         }
-        .header h1 {
+        .header h2 {
             margin: 0;
             font-size: 1.5em;
         }
-        .confirm-container p {
-            margin: 20px 0;
+        .form-container label {
+            display: block;
+            margin-top: 10px;
             color: #333;
         }
-        .btn-confirm {
-            background-color: #28a745;
-            color: white;
-            padding: 10px 20px;
-            border: none;
+        .form-container input {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ECE2D0; /* Beige for input borders */
             border-radius: 4px;
-            margin-right: 10px;
-            cursor: pointer;
         }
-        .btn-cancel {
-            background-color: #6c757d;
+        .btn-submit {
+            background-color: #FF80AB; /* Bright Pink for Register button */
             color: white;
             padding: 10px 20px;
             border: none;
             border-radius: 4px;
+            margin-top: 20px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .btn-submit:hover {
+            background-color: #80DEEA; /* Light Teal on hover */
+        }
+        .error {
+            color: #8D6E63; /* Maroon for error messages */
+            margin-top: 10px;
+            text-align: center;
+        }
+        .form-container p {
+            margin-top: 15px;
+            text-align: center;
+        }
+        .form-container a {
+            color: #26A69A; /* Dark Teal for links */
             text-decoration: none;
+        }
+        .form-container a:hover {
+            color: #FF80AB; /* Bright Pink on hover */
         }
     </style>
 </head>
 <body>
-    <div class="confirm-container">
+    <div class="form-container">
         <div class="header">
-            <h1>Confirm Deletion</h1>
+            <h2>Register</h2>
         </div>
-        <p>Are you sure you want to delete "{{ item.name }}"?</p>
         <form method="post">
             {% csrf_token %}
-            <button type="submit" class="btn-confirm">Confirm Delete</button>
-            <a href="{% url 'item_list' %}" class="btn-cancel">Cancel</a>
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+            <label for="password_confirm">Confirm Password:</label>
+            <input type="password" id="password_confirm" name="password_confirm" required>
+            <button type="submit" class="btn-submit">Register</button>
         </form>
+        {% if error %}
+        <p class="error">{{ error }}</p>
+        {% endif %}
+        <p>Already have an account? <a href="{% url 'login' %}">Login here</a>.</p>
     </div>
 </body>
-</html> 
+</html>

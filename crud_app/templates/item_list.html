@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Item List</title>
+    <title>Budget Tracker</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #e6f0fa;
+            background-color: #F8BBD0; /* Light Pink as background */
             margin: 0;
             padding: 20px;
         }
@@ -14,20 +14,25 @@
             margin: 0 auto;
             background-color: white;
             padding: 20px;
-            border: 1px solid #ddd;
+            border: 1px solid #ECE2D0; /* Beige for border */
             border-radius: 4px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
         .btn-add {
-            background-color: #28a745;
+            background-color: #26A69A; /* Dark Teal for Add Expense button */
             color: white;
             padding: 8px 16px;
             text-decoration: none;
             border-radius: 4px;
             display: inline-block;
             margin-bottom: 10px;
+            transition: background-color 0.3s;
+        }
+        .btn-add:hover {
+            background-color: #80DEEA; /* Light Teal on hover */
         }
         .btn-logout {
-            background-color: #d9534f;
+            background-color: #8D6E63; /* Maroon for Logout button */
             color: white;
             padding: 8px 16px;
             text-decoration: none;
@@ -35,6 +40,10 @@
             display: inline-block;
             margin-bottom: 10px;
             margin-left: 10px;
+            transition: background-color 0.3s;
+        }
+        .btn-logout:hover {
+            background-color: #FF80AB; /* Bright Pink on hover */
         }
         table {
             width: 100%;
@@ -42,33 +51,46 @@
             margin-bottom: 20px;
         }
         th, td {
-            border: 1px solid #ddd;
+            border: 1px solid #ECE2D0; /* Beige for table borders */
             padding: 8px;
             text-align: left;
         }
         th {
-            background-color: #f5f5f5;
+            background-color: #80DEEA; /* Light Teal for table headers */
+            color: #333;
             cursor: pointer;
         }
         th:hover {
-            background-color: #e0e0e0;
+            background-color: #FF80AB; /* Bright Pink on hover */
         }
         td {
             background-color: #ffffff;
         }
         .btn-edit {
-            background-color: #f0ad4e;
+            background-color: #FF80AB; /* Bright Pink for Edit button */
             color: white;
             padding: 5px 10px;
             text-decoration: none;
             border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        .btn-edit:hover {
+            background-color: #26A69A; /* Dark Teal on hover */
         }
         .btn-delete {
-            background-color: #d9534f;
+            background-color: #8D6E63; /* Maroon for Delete button */
             color: white;
             padding: 5px 10px;
             text-decoration: none;
             border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        .btn-delete:hover {
+            background-color: #F8BBD0; /* Light Pink on hover */
+        }
+        .total-row {
+            background-color: #ECE2D0; /* Beige for total row */
+            font-weight: bold;
         }
         .pagination {
             display: flex;
@@ -79,36 +101,45 @@
         .pagination a {
             padding: 5px 10px;
             text-decoration: none;
-            border: 1px solid #ddd;
+            border: 1px solid #ECE2D0; /* Beige for pagination borders */
             border-radius: 4px;
+            color: #333;
+            transition: background-color 0.3s;
         }
         .pagination a.prev {
-            background-color: #800080;
+            background-color: #26A69A; /* Dark Teal for Previous button */
             color: white;
+        }
+        .pagination a.prev:hover {
+            background-color: #80DEEA; /* Light Teal on hover */
         }
         .pagination a.active {
-            background-color: #007bff;
+            background-color: #FF80AB; /* Bright Pink for active page */
             color: white;
         }
+        .pagination a.active:hover {
+            background-color: #F8BBD0; /* Light Pink on hover */
+        }
         .pagination a.next {
-            background-color: #008080;
+            background-color: #26A69A; /* Dark Teal for Next button */
             color: white;
+        }
+        .pagination a.next:hover {
+            background-color: #80DEEA; /* Light Teal on hover */
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <a href="{% url 'item_create' %}" class="btn-add">Add Record</a>
+        <a href="{% url 'item_create' %}" class="btn-add">Add Expense</a>
         <a href="{% url 'logout' %}" class="btn-logout">Logout</a>
         <table>
             <thead>
                 <tr>
                     <th>ID ▲</th>
-                    <th>Expenses</th>
-                    <th>predicted</th>
-                    <th>Actual</th>
-                    <th>Difference</th>
-                    <th>Comments</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Amount ($)</th>
                     <th></th>
                     <th></th>
                 </tr>
@@ -118,16 +149,21 @@
                 <tr>
                     <td>{{ item.pk }}</td>
                     <td>{{ item.name }}</td>
-                    <td>{{ item.description }}</td>
-                    <td>{{ item.active }}</td>
-                    <td>{{ item.country|default:"—" }}</td>
-                    <td>{{ item.role|default:"—" }}</td>
+                    <td>{{ item.description|default:"—" }}</td>
+                    <td>{{ item.amount }}</td>
                     <td><a href="{% url 'item_edit' item.pk %}" class="btn-edit">Edit</a></td>
                     <td><a href="{% url 'item_delete' item.pk %}" class="btn-delete">Delete</a></td>
                 </tr>
                 {% empty %}
-                <tr><td colspan="8">No items found.</td></tr>
+                <tr><td colspan="6">No expenses found.</td></tr>
                 {% endfor %}
+                <!-- Total Row -->
+                <tr class="total-row">
+                    <td colspan="3">Total Expenses</td>
+                    <td>{{ total_expenses|floatformat:2 }}</td>
+                    <td></td>
+                    <td></td>
+                </tr>
             </tbody>
         </table>
         <div class="pagination">

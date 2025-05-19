@@ -2,10 +2,8 @@ from django.db import models
 
 class Item(models.Model):
     name = models.CharField(max_length=100)
-    description = models.TextField()
-    active = models.BooleanField(default=True)
-    country = models.CharField(max_length=100, blank=True)
-    role = models.CharField(max_length=100, blank=True)
+    description = models.TextField(blank=True, null=True)
+    amount = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)  # For expense amounts
 
     def __str__(self):
         return self.name

@@ -4,6 +4,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from .models import Item
 from .forms import ItemForm
+from django.db.models import Sum  # Import Sum for aggregation
 
 # Login view
 def login_view(request):
@@ -47,7 +48,8 @@ def register_view(request):
 @login_required
 def item_list(request):
     items = Item.objects.all()
-    return render(request, 'item_list.html', {'items': items})
+    total_expenses = items.aggregate(Sum('amount'))['amount__sum'] or 0.00  # Calculate total expenses
+    return render(request, 'item_list.html', {'items': items, 'total_expenses': total_expenses})
 
 # Create a new item (require login)
 @login_required
